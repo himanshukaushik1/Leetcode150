@@ -1,0 +1,49 @@
+/*
+Given a set of numbers, check whether it can be partitioned into two subsets such that the sum of elements 
+in both subsets is same or not.
+*/
+// Code Submitted by Himanshu Kaushik (linkedin.com/in/himanshu-kaushik-a7862516b)
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+bool findPartition(int *, int);
+
+int main() {
+    int tc;
+    cin >> tc;
+    while (tc--) {
+        int n, i;
+        cin >> n;
+        int a[n];
+        for (i = 0; i < n; i++) cin >> a[i];
+
+        if (findPartition(a, n))
+            printf("YES\n");
+        else
+            printf("NO\n");
+    }
+    return 0;
+}
+
+bool findPartition(int a[], int n) {
+    int sum = 0;
+    for(int i=0; i<n; i++) sum += a[i];
+    if(sum%2 != 0) return false;
+    sum /= 2;
+    bool dp[n+1][sum+1];
+    for(int i=0; i<n+1; i++) dp[i][0] = true;
+    for(int j=1; j<sum+1; j++) dp[0][j] = false;
+    for(int i=1; i<n+1; i++){
+        for(int j=1; j<sum+1; j++){
+            if(a[i-1]<=j){
+                dp[i][j] = dp[i-1][j-a[i-1]] || dp[i-1][j];
+            }
+            else{
+                dp[i][j] = dp[i-1][j];
+            }
+        }
+    }
+    return dp[n][sum];
+}
